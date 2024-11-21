@@ -8,7 +8,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'https://peppermintpiyush.netlify.app/', 
+  origin: 'https://peppermintpiyush.netlify.app', 
   methods: 'GET, POST, PUT, DELETE', 
   allowedHeaders: 'Content-Type, Authorization' 
 }));
