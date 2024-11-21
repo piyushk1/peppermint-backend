@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ["Income", "Expense"], 
+    enum: ['Income', 'Expense'], 
   },
   date: {
     type: Date,
@@ -13,13 +13,13 @@ const transactionSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    trim: true,
   },
   amount: {
     type: Number,
     required: true,
-    min: [0, "Amount must be positive"],
   },
 });
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
+
+module.exports = Transaction;
