@@ -2,17 +2,33 @@ const express = require("express");
 const Transaction = require("../models/Transaction");
 
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 
 // Add Transaction
-router.post("/", async (req, res) => {
-  try {
-    const transaction = new Transaction(req.body);
-    await transaction.save();
-    res.status(201).json(transaction);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+router.post(
+  "/",
+  [
+    check("type").isIn(["Income", "Expense"]).withMessage("Invalid type"),
+    check("date").isISO8601().withMessage("Invalid date"),
+    check("description").notEmpty().withMessage("Description is required"),
+    check("amount").isFloat({ gt: 0 }).withMessage("Amount must be positive"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const transaction = new Transaction(req.body);
+      await transaction.save();
+      res.status(201).json(transaction);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   }
-});
+);
+
 
 // Get All Transaction
 router.get("/", async (req, res) => {
